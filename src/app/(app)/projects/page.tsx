@@ -1,24 +1,24 @@
 "use client";
 
-import { useState, useEffect } // Add useEffect
-from 'react';
+import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ProjectList } from '@/components/projects/ProjectList';
 import { CreateProjectDialog } from '@/components/projects/CreateProjectDialog';
+import { ClientOnly } from '@/components/shared/ClientOnly';
 import type { Project } from '@/lib/types';
-import { mockProjects } from '@/data/mockData'; // Using mock data
+import { mockProjects } from '@/data/mockData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Simulate fetching projects
     setTimeout(() => {
       setProjects(mockProjects);
-      setIsLoading(false); // Set loading to false after data is "fetched"
-    }, 1000); // Simulate 1 second delay
+      setIsLoading(false);
+    }, 1000);
   }, []);
 
   const handleProjectCreated = (newProject: Project) => {
@@ -32,13 +32,19 @@ export default function ProjectsPage() {
         description="Manage all your projects in one place."
         actions={<CreateProjectDialog onProjectCreated={handleProjectCreated} />}
       />
-      {isLoading ? (
+      <ClientOnly fallback={
         <div className="flex justify-center items-center min-h-[300px]">
           <LoadingSpinner size="lg" />
         </div>
-      ) : (
-        <ProjectList projects={projects} />
-      )}
+      }>
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-[300px]">
+            <LoadingSpinner size="lg" />
+          </div>
+        ) : (
+          <ProjectList projects={projects} />
+        )}
+      </ClientOnly>
     </div>
   );
 }

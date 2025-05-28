@@ -1,18 +1,19 @@
 "use client";
 
-import type { ReactNode } from 'react';
+import { use } from 'react';
 import { ProjectSubNav } from '@/components/layout/ProjectSubNav';
 import { mockProjects } from '@/data/mockData';
 import { notFound } from 'next/navigation';
 import { PageHeader } from '@/components/shared/PageHeader';
 
 interface ProjectLayoutProps {
-  children: ReactNode;
-  params: { projectId: string };
+  children: React.ReactNode;
+  params: Promise<{ projectId: string }>;
 }
 
 export default function ProjectLayout({ children, params }: ProjectLayoutProps) {
-  const project = mockProjects.find(p => p.id === params.projectId);
+  const { projectId } = use(params);
+  const project = mockProjects.find(p => p.id === projectId);
 
   if (!project) {
     notFound();
@@ -24,7 +25,7 @@ export default function ProjectLayout({ children, params }: ProjectLayoutProps) 
         title={project.name}
         description={project.description || "Manage this project's details, tasks, and progress."}
       />
-      <ProjectSubNav projectId={params.projectId} />
+      <ProjectSubNav projectId={projectId} />
       {children}
     </div>
   );

@@ -18,19 +18,31 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setMounted(true);
     // Simulate checking for an existing session
     const storedUser = localStorage.getItem('taskflow-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Failed to parse stored user:', error);
+        localStorage.removeItem('taskflow-user');
+      }
     }
     setLoading(false);
   }, []);
 
   const login = (email: string, name: string = "Demo User") => {
-    const mockUser: User = { id: '1', email, name, avatarUrl: `https://placehold.co/100x100.png?text=${name.substring(0,1)}` };
+    const mockUser: User = { 
+      id: '1', 
+      email, 
+      name, 
+      avatarUrl: `https://placehold.co/100x100.png?text=${name.substring(0,1)}` 
+    };
     setUser(mockUser);
     localStorage.setItem('taskflow-user', JSON.stringify(mockUser));
     router.push('/dashboard');
@@ -44,8 +56,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
   const isAuthenticated = !!user;
 
-  if (loading && typeof window !== 'undefined' && !['/login', '/signup'].includes(window.location.pathname)) {
-    return <div className="flex h-screen items-center justify-center"><LoadingSpinner size="lg" /></div>;
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
   }
 
   return (

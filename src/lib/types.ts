@@ -29,6 +29,7 @@ export interface Task {
   id: string;
   projectId: string;
   userStoryId?: string;
+  sprintId?: string;
   title: string;
   description?: string;
   status: TaskStatus;
@@ -38,20 +39,57 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   dueDate?: string;
+  storyPoints?: number;
+  tags?: string[];
 }
+
+export type UserStoryStatus = 'backlog' | 'todo' | 'inprogress' | 'done';
+export type UserStoryPriority = 'low' | 'medium' | 'high' | 'critical';
 
 export interface UserStory {
   id: string;
   projectId: string;
+  sprintId?: string;
   title: string;
   description?: string;
-  status: 'todo' | 'inprogress' | 'done';
-  priority: TaskPriority;
+  acceptanceCriteria?: string[];
+  status: UserStoryStatus;
+  priority: UserStoryPriority;
   reporterId: string;
   assigneeId?: string;
   createdAt: string;
   updatedAt: string;
+  storyPoints?: number;
+  businessValue?: number;
+  tags?: string[];
   tasks?: Task[];
+}
+
+export type SprintStatus = 'planning' | 'active' | 'completed' | 'cancelled';
+
+export interface Sprint {
+  id: string;
+  projectId: string;
+  name: string;
+  description?: string;
+  status: SprintStatus;
+  startDate: string;
+  endDate: string;
+  goal?: string;
+  createdAt: string;
+  updatedAt: string;
+  capacity?: number; // Total story points capacity
+  velocity?: number; // Actual completed story points
+}
+
+export interface Backlog {
+  id: string;
+  projectId: string;
+  name: string;
+  description?: string;
+  userStories: UserStory[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type BugStatus = 'open' | 'inprogress' | 'resolved' | 'closed';
@@ -62,6 +100,7 @@ export interface Bug {
   projectId: string;
   taskId?: string;
   userStoryId?: string;
+  sprintId?: string;
   title: string;
   description: string;
   status: BugStatus;
@@ -70,4 +109,29 @@ export interface Bug {
   assigneeId?: string;
   createdAt: string;
   updatedAt: string;
+  stepsToReproduce?: string[];
+  expectedBehavior?: string;
+  actualBehavior?: string;
+}
+
+// Analytics and Reporting Types
+export interface SprintMetrics {
+  sprintId: string;
+  plannedStoryPoints: number;
+  completedStoryPoints: number;
+  velocity: number;
+  burndownData: { date: string; remaining: number }[];
+  completionRate: number;
+}
+
+export interface ProjectMetrics {
+  projectId: string;
+  totalUserStories: number;
+  completedUserStories: number;
+  totalTasks: number;
+  completedTasks: number;
+  totalBugs: number;
+  resolvedBugs: number;
+  averageVelocity: number;
+  teamProductivity: number;
 }
