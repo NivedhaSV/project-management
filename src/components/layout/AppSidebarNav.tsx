@@ -12,8 +12,8 @@ import {
   LifeBuoy,
   Users,
   Briefcase,
+  Building2,
 } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface NavItem {
   href: string;
@@ -24,6 +24,7 @@ interface NavItem {
 
 const mainNavItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, matchExact: true },
+  { href: '/clients', label: 'Clients', icon: Building2 },
   { href: '/projects', label: 'Projects', icon: FolderKanban },
   { href: '/my-tasks', label: 'My Tasks', icon: ListChecks },
 ];

@@ -7,7 +7,8 @@ import type {
   Sprint, 
   Backlog,
   SprintMetrics,
-  ProjectMetrics 
+  ProjectMetrics,
+  Client
 } from '@/lib/types';
 
 export const mockUsers: User[] = [
@@ -40,9 +41,34 @@ export const mockUsers: User[] = [
 // Use fixed dates to prevent hydration mismatches
 const baseDate = new Date('2024-01-01T00:00:00.000Z');
 
+export const mockClients: Client[] = [
+  {
+    id: 'client-1',
+    name: 'Acme Corporation',
+    description: 'Global e-commerce and retail solutions',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-15T10:30:00Z',
+  },
+  {
+    id: 'client-2',
+    name: 'TechStart Solutions',
+    description: 'Innovative software development company',
+    createdAt: '2024-01-05T00:00:00Z',
+    updatedAt: '2024-01-16T16:45:00Z',
+  },
+  {
+    id: 'client-3',
+    name: 'FinBank Global',
+    description: 'International banking and financial services',
+    createdAt: '2024-01-10T00:00:00Z',
+    updatedAt: '2024-01-18T09:15:00Z',
+  },
+];
+
 export const mockProjects: Project[] = [
   {
     id: 'proj-1',
+    clientId: 'client-1',
     name: 'E-commerce Platform',
     description: 'Modern e-commerce platform with React and Node.js',
     createdAt: '2024-01-01T00:00:00Z',
@@ -56,6 +82,7 @@ export const mockProjects: Project[] = [
   },
   {
     id: 'proj-2',
+    clientId: 'client-2',
     name: 'Mobile Banking App',
     description: 'Secure mobile banking application for iOS and Android',
     createdAt: '2024-01-10T00:00:00Z',
@@ -72,7 +99,7 @@ export const mockProjects: Project[] = [
 export const mockSprints: Sprint[] = [
   {
     id: 'sprint-1',
-    projectId: 'proj-1',
+    clientId: 'client-1',
     name: 'Sprint 1 - User Authentication',
     description: 'Implement user registration, login, and authentication system',
     status: 'completed',
@@ -83,10 +110,11 @@ export const mockSprints: Sprint[] = [
     updatedAt: '2024-01-14T23:59:59Z',
     capacity: 40,
     velocity: 35,
+    userStoryIds: ['story-1', 'story-2'],
   },
   {
     id: 'sprint-2',
-    projectId: 'proj-1',
+    clientId: 'client-1',
     name: 'Sprint 2 - Product Catalog',
     description: 'Build product listing, search, and filtering functionality',
     status: 'active',
@@ -97,10 +125,11 @@ export const mockSprints: Sprint[] = [
     updatedAt: '2024-01-20T10:30:00Z',
     capacity: 45,
     velocity: 0,
+    userStoryIds: ['story-3'],
   },
   {
     id: 'sprint-3',
-    projectId: 'proj-2',
+    clientId: 'client-2',
     name: 'Sprint 1 - Account Management',
     description: 'Core account management features for mobile banking',
     status: 'planning',
@@ -108,9 +137,10 @@ export const mockSprints: Sprint[] = [
     endDate: '2024-02-04T23:59:59Z',
     goal: 'Complete account overview and basic transaction history',
     createdAt: '2024-01-20T00:00:00Z',
-    updatedAt: '2024-01-20T00:00:00Z',
-    capacity: 50,
+    updatedAt: '2024-01-20T09:00:00Z',
+    capacity: 35,
     velocity: 0,
+    userStoryIds: ['story-5'],
   },
 ];
 
@@ -187,6 +217,7 @@ export const mockUserStories: UserStory[] = [
   {
     id: 'story-4',
     projectId: 'proj-1',
+    sprintId: 'sprint-2',
     title: 'Shopping Cart',
     description: 'As a customer, I want to add products to a cart so that I can purchase multiple items',
     acceptanceCriteria: [
@@ -233,8 +264,8 @@ export const mockUserStories: UserStory[] = [
 export const mockTasks: Task[] = [
   {
     id: 'task-1',
-    projectId: 'proj-1',
     userStoryId: 'story-1',
+    projectId: 'proj-1',
     sprintId: 'sprint-1',
     title: 'Create user registration form',
     description: 'Design and implement the user registration form with validation',
@@ -298,6 +329,8 @@ export const mockTasks: Task[] = [
   {
     id: 'task-5',
     projectId: 'proj-1',
+    userStoryId: 'story-4',
+    sprintId: 'sprint-3',
     title: 'Setup project infrastructure',
     description: 'Configure CI/CD pipeline and deployment environment',
     status: 'done',

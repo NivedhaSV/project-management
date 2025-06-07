@@ -14,6 +14,7 @@ export interface ProjectMember {
 
 export interface Project {
   id: string;
+  clientId: string;
   name: string;
   description: string;
   createdAt: string;
@@ -27,9 +28,9 @@ export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {
   id: string;
+  userStoryId: string;
   projectId: string;
-  userStoryId?: string;
-  sprintId?: string;
+  sprintId: string;
   title: string;
   description?: string;
   status: TaskStatus;
@@ -49,7 +50,7 @@ export type UserStoryPriority = 'low' | 'medium' | 'high' | 'critical';
 export interface UserStory {
   id: string;
   projectId: string;
-  sprintId?: string;
+  sprintId: string;
   title: string;
   description?: string;
   acceptanceCriteria?: string[];
@@ -69,7 +70,7 @@ export type SprintStatus = 'planning' | 'active' | 'completed' | 'cancelled';
 
 export interface Sprint {
   id: string;
-  projectId: string;
+  clientId: string;
   name: string;
   description?: string;
   status: SprintStatus;
@@ -78,8 +79,9 @@ export interface Sprint {
   goal?: string;
   createdAt: string;
   updatedAt: string;
-  capacity?: number; // Total story points capacity
-  velocity?: number; // Actual completed story points
+  capacity?: number;
+  velocity?: number;
+  userStoryIds: string[];
 }
 
 export interface Backlog {
@@ -134,4 +136,12 @@ export interface ProjectMetrics {
   resolvedBugs: number;
   averageVelocity: number;
   teamProductivity: number;
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
 }
