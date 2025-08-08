@@ -11,10 +11,17 @@ import { Plus, Timer, Calendar, CheckCircle2 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
 import { CreateSprintDialog } from '@/components/sprints/CreateSprintDialog';
-import type { Sprint } from '@/lib/types';
+import type { Sprint, SprintStatus } from '@/lib/types';
+import { notFound } from 'next/navigation';
 
 export default function ClientSprintsPage() {
-  const { clientId } = useParams();
+  const params = useParams();
+  const clientId = params.clientId as string;
+
+  if (!clientId) {
+    notFound();
+  }
+
   const [searchQuery, setSearchQuery] = useState('');
   const [sprints, setSprints] = useState<Sprint[]>(
     mockSprints.filter(sprint => sprint.clientId === clientId)
@@ -29,15 +36,23 @@ export default function ClientSprintsPage() {
     sprint.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getSprintProgress = (sprint: typeof mockSprints[0]) => {
-    if (sprint.status === 'completed') return 100;
-    if (sprint.status === 'planning') return 0;
-    
-    // For active sprints, calculate based on velocity vs capacity
-    return Math.round((sprint.velocity || 0) / (sprint.capacity || 1) * 100);
+  const getSprintProgress = (sprint: Sprint) => {
+    switch (sprint.status) {
+      case 'completed':
+        return 100;
+      case 'planning':
+        return 0;
+      case 'active':
+        // For active sprints, calculate based on velocity vs capacity
+        return Math.round((sprint.velocity || 0) / (sprint.capacity || 1) * 100);
+      case 'cancelled':
+        return 0;
+      default:
+        return 0;
+    }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: SprintStatus) => {
     switch (status) {
       case 'active':
         return 'bg-green-500/10 text-green-500 border-green-500/20';
@@ -45,6 +60,8 @@ export default function ClientSprintsPage() {
         return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
       case 'completed':
         return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
+      case 'cancelled':
+        return 'bg-red-500/10 text-red-500 border-red-500/20';
       default:
         return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
     }
@@ -133,4 +150,4 @@ export default function ClientSprintsPage() {
       )}
     </div>
   );
-} 
+}
