@@ -74,7 +74,7 @@ export interface Sprint {
   clientId: string;
   name: string;
   description?: string;
-  status: SprintStatus;
+  status: string;
   startDate: string;
   endDate: string;
   goal?: string;
