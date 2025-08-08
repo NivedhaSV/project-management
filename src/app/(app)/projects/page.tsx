@@ -30,7 +30,7 @@ export default function ProjectsPage() {
       <PageHeader
         title="Projects"
         description="Manage all your projects in one place."
-        actions={<CreateProjectDialog onProjectCreated={handleProjectCreated} />}
+        actions={<CreateProjectDialog mode="create" onProjectCreated={handleProjectCreated} />}
       />
       <ClientOnly fallback={
         <div className="flex justify-center items-center min-h-[300px]">

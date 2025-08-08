@@ -68,20 +68,20 @@ export function CreateSprintDialog({
     setIsSubmitting(true);
     try {
       // Simulate API call
-      const newSprint: Sprint = {
+      const newSprint = {
         id: `sprint-${Date.now()}`,
         clientId,
         name: values.name,
-        description: values.description,
-        status: 'planning',
+        description: values.description || "",
+        status: "active" as const,
         startDate: values.startDate,
         endDate: values.endDate,
         capacity: values.capacity,
         velocity: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userStoryIds: [],
-      };
+        userStoryIds: [] as string[],
+      } satisfies Sprint;
 
       // In a real app, this would be an API call
       mockSprints.push(newSprint);
@@ -217,4 +217,4 @@ export function CreateSprintDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

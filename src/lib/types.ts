@@ -12,11 +12,13 @@ export interface ProjectMember {
   role: ProjectRole;
 }
 
+export type ProjectStatus = 'active' | 'inactive';
+
 export interface Project {
   id: string;
   name: string;
   description?: string;
-  status: 'active' | 'paused' | 'stopped';
+  status: ProjectStatus;
   clientId: string;
   ownerId: string;
   members?: ProjectMember[];
