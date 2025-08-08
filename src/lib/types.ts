@@ -14,13 +14,14 @@ export interface ProjectMember {
 
 export interface Project {
   id: string;
-  clientId: string;
   name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
+  description?: string;
+  status: 'active' | 'paused' | 'stopped';
+  clientId: string;
   ownerId: string;
   members?: ProjectMember[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type TaskStatus = 'todo' | 'inprogress' | 'review' | 'done';

@@ -5,7 +5,7 @@ import { ProjectCard } from './ProjectCard';
 import { useState, useEffect } from 'react';
 import { mockProjects } from '@/data/mockData'; // Using mock data
 import { Input } from "@/components/ui/input";
-import { Search } from 'lucide-react';
+import { Search, FolderKanban } from 'lucide-react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
 interface ProjectListProps {

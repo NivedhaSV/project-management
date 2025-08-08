@@ -4,13 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TaskCard } from '@/components/tasks/TaskCard';
+import { TaskDialog } from '@/components/tasks/TaskDialog';
 import type { Task, TaskStatus } from '@/lib/types';
 import { PlusCircle } from 'lucide-react';
 
 interface KanbanColumnProps {
   status: TaskStatus;
   tasks: Task[];
+  projectId: string;
   onTaskMove?: (taskId: string, newStatus: TaskStatus) => void;
+  onTaskCreated?: (task: Task) => void;
 }
 
 const columnTitles: Record<TaskStatus, string> = {
@@ -27,14 +30,9 @@ const columnColors: Record<TaskStatus, string> = {
   done: "border-l-green-400"
 };
 
-export function KanbanColumn({ status, tasks, onTaskMove }: KanbanColumnProps) {
+export function KanbanColumn({ status, tasks, projectId, onTaskMove, onTaskCreated }: KanbanColumnProps) {
   const title = columnTitles[status];
   const colorClass = columnColors[status];
-  
-  const handleAddTask = () => {
-    console.log(`Add task to ${status}`);
-    // TODO: Implement add task functionality
-  };
 
   const handleTaskDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -59,14 +57,21 @@ export function KanbanColumn({ status, tasks, onTaskMove }: KanbanColumnProps) {
           <CardTitle className="text-base font-semibold">
             {title} ({tasks.length})
           </CardTitle>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-7 w-7" 
-            onClick={handleAddTask}
-          >
-            <PlusCircle className="h-4 w-4 text-muted-foreground" />
-          </Button>
+          <TaskDialog
+            mode="create"
+            projectId={projectId}
+            defaultValues={{ status }}
+            onTaskCreated={onTaskCreated}
+            trigger={
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-7 w-7"
+              >
+                <PlusCircle className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            }
+          />
         </div>
       </CardHeader>
       <ScrollArea className="flex-grow">

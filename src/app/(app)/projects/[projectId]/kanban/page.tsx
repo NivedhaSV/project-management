@@ -41,6 +41,10 @@ export default function KanbanPage({ params }: KanbanPageProps) {
     );
   };
 
+  const handleTaskCreated = (newTask: Task) => {
+    setTasks(prevTasks => [newTask, ...prevTasks]);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -63,7 +67,9 @@ export default function KanbanPage({ params }: KanbanPageProps) {
                 key={status}
                 status={status}
                 tasks={statusTasks}
+                projectId={projectId}
                 onTaskMove={handleTaskMove}
+                onTaskCreated={handleTaskCreated}
               />
             );
           })}
